@@ -1,0 +1,14 @@
+{
+    "role": {
+    "exeName":"/var/usr/sbin/com.whitm.suborbital.service",
+    "type": "regular",
+    "allowedNames": ["com.whitm.suborbital.service"]
+    },
+    "permissions": [
+        {
+         "service":"com.whitm.suborbital.service",
+		 "inbound":["*"],
+         "outbound":["*"]
+        }
+    ]
+}

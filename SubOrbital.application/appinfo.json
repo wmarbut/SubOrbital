@@ -1,0 +1,10 @@
+{
+	"id": "com.whitm.suborbital.app",
+	"version": "0.7.1",
+	"vendor": "Whit",
+	"type": "web",
+	"main": "index.html",
+	"title": "SubOrbital",
+	"icon": "icon.png",
+	"uiRevision": 2
+}

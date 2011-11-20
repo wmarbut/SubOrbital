@@ -1,0 +1,36 @@
+{
+	"id": "com.whitm.suborbital.service",
+	"description": "Launcher tabs manager",
+	"activityTimeout" : 30,
+	"services": [{
+		"name": "com.whitm.suborbital.service",
+		"description": "launcher tabs manager",
+		"commands": [
+			{
+				"name": "restartLuna",
+				"assistant": "RestartAssistant",
+				"public": true
+			},
+			{
+				"name": "launcher",
+				"assistant": "LauncherAssistant",
+				"public": true
+			},
+			{
+				"name": "logError",
+				"assistant": "LogWriteAssistant",
+				"public":true
+			},
+			{
+			    "name": "backupCreate",
+			    "assistant": "BackupCreateAssistant",
+			    "public": true
+			},
+			{
+			    "name": "backupRestore",
+			    "assistant": "BackupRestoreAssistant",
+			    "public": true
+			}
+		]
+	 }]
+} 

@@ -1,0 +1,22 @@
+[{
+    "library": {
+        "name": "foundations",
+        "version" : "1.0"
+      }
+},
+{
+	"source": "LauncherAssistant.js"
+},
+{
+	"source": "RestartAssistant.js"
+},
+{
+	"source": "LogWriteAssistant.js"
+},
+{
+    "source": "BackupCreateAssistant.js"
+},
+{
+    "source": "BackupRestoreAssistant.js"
+}
+]

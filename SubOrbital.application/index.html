@@ -1,0 +1,83 @@
+<!doctype html>
+<html>	
+	<!-- 
+	This work is licensed under a Creative Commons Attribution, Non-Commercial, Share-a-like license
+	It can be found here http://creativecommons.org/licenses/by-nc-sa/3.0/
+	Copyright @grep_awesome 2011
+	-->
+<head>
+	<title>SubOrbital</title>
+
+	<!--<script src="../../../../1.0/framework/enyo.js" type="text/javascript"></script>-->
+	<!--<script src="/opt/PalmSDK/0.1/share/refcode/framework/enyo/1.0/framework/enyo.js" type="text/javascript"></script>-->
+	<script src="/Program Files (x86)/HP webOS/SDK/share/refcode/webos-framework/enyo/1.0/framework/enyo.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="readMe">
+	<h2>Important</h2>
+	<ul>
+		<li>SubOrbital by @grep_awesome is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.</li>
+		<li>I advise you to backup "/var/luna/preferences/launcher3" just in case the worst happens. This is where
+		SubOrbital makes its changes. If SubOrbital does screw up you system, restoring the original contents of this folder
+		will fix the problem.</li>
+		<li>This app can screw up your system. It is very unlikely, but it is possible. Be aware.
+			<strong>I am not responsible for any damange this does to your system or your warranty.</strong>
+		</li>
+		<li>Changes made by this app require a Luna restart to show up.</li>
+	</ul>
+	<h2> FAQ</h2>
+	<ul>
+		<li>What do you mean it can screw up my system?</li>
+		<ul>
+			<li>
+				SubOrbital does its thing by editing files in "/var/luna/preferences/launcher3". Those
+				files are key to the Launcher on webOS to work correctly. If SubOrbital goes postal,
+				<strong>it will not brick your device</strong>, but it can prevent it from working until you
+				hash out those files. My strong suggestion is to back them up.
+			</li>
+		</ul>
+		<li>Why can't I edit the default tabs?</li>
+		<ul>
+			<li>
+				The launcher doesn't really respect its config files. It only partially respects them.
+				To know the real answer, you'd have to ask the webOS guys.
+			</li>
+		</ul>
+		<li>Why doesn't my tab save / what characters are valid?</li>
+		<ul>
+			<li>
+				If you try to name a tab with anything other than alpha-numberi characters (also - and _), it will not save.
+			</li>
+		</ul>
+		<li>I got an error Dialog! What now?</li>
+		<ul>
+			<li>Error dialogs here are a good thing. It means SubOrbital
+			caught the error and likely didn't do damage. On the other hand
+			SubOrbital probably didn't do what you asked it to either. An error
+			log will be placed in /media/internal/SubOrbital_error/. If you'd kindly
+			send that to me on precentral (hiddenpremise) or post it on the official
+			thread for the app, I'll try to track down and fix the issue.</li>
+		</ul>
+		<li>Your interface is ugly!</li>
+		<ul>
+			<li>So is your face... But really, yes, I know it isn't pretty.</li>
+		</ul>
+		<li>I need help!</li>
+		<ul>
+			<li>I'm usually happy to work with folks on the forums or irc, however you may need to be patient. 
+			This is a hobby of mine that you freely benefit from. Keep
+			that in mind when we speak ;). The quickest fix for any problem is to restore
+			the backup that I reccomend you make and do a luna restart.
+			There is no warranty express or implied for this software.</li>
+		</ul>
+		<li>I'd like the source code please.</li>
+		<ul>
+			<li>You've already got it. "ar -x com.whitm.suborbital_X.X.X.ipk" where the x's are the version number.</li>
+		</ul>
+	</ul>
+</div>
+<script type="text/javascript">
+	var so = new SubOrbitalMain().renderInto(document.body);
+</script>
+</body>
+</html>
