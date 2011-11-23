@@ -11,7 +11,7 @@ enyo.kind({
 	tab_data: [
 	
 	],
-	svcDebug: true,
+	svcDebug: false,
 	built_in_tabs: {
 		"APPS": {
 			"name":"APPS",
@@ -338,15 +338,15 @@ enyo.kind({
 		this.tab_data = new Array();
 		for (var entry_i in inResponse.data) {
 			var entry = inResponse.data[entry_i];
-			//if (!this.built_in_tabs[entry.name]) {
 				this.tab_data.push(entry);
-			//}
 		}
 		if (inResponse.error && inResponse.error.length > 0) {
-			//TODO write error log
 			this.$.errorLogger.writeLog(inResponse.error)
 		}
 		this.$.tabsList.refresh();
+		if (inResponse.newIndex) {
+			this.selectItem(this, {rowIndex: inResponse.newIndex});
+		}
 	},
 	launcherFailure: function(inSender, inResponse) {
 		console.error("The launcher service call failed");

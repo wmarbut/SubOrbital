@@ -63,6 +63,7 @@ LauncherAssistant.prototype.moveTab = function(future, args) {
 	}
 	console.log("***LauncherAssistant Move entry: " + entry.name + " delta: " + args.delta);
 	args.conf.moveEntry(entry, entry.index+args.delta);
+	args.newIndex = entry.index;
 	this.returnData(future, args);
 }
 LauncherAssistant.prototype.renameTab = function(future, args) {
@@ -100,6 +101,7 @@ LauncherAssistant.prototype.returnData = function(future, args) {
 	future.result = {
 		"action": args.action,
 		"data": args.conf.exportEntries(),
-		"error":args.conf.errors
+		"error":args.conf.errors,
+		"newIndex":(args.newIndex)? args.newIndex : false
 	}
 }

@@ -8,5 +8,5 @@
   "vendor": "Whit",
   "vendorurl": "whitmarbut.com",
   "app": "com.whitm.suborbital.app",
-  "services": ["com.whitm.suborbital.service"]
+  "services": ["com.whitm.suborbital.service"],
 }

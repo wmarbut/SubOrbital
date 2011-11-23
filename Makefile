@@ -2,7 +2,7 @@ APPID=com.whitm.suborbital
 
 build: clean
 	echo "Building target: ${APPID}"
-	palm-package -X exclude.txt *.application *.service *.package
+	palm-package -X exclude.txt *.package *.application *.service
 	ar -q ${APPID}_*.ipk pmPostInstall.script
 	ar -q ${APPID}_*.ipk pmPreRemove.script
 	
