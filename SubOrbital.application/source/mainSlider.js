@@ -51,7 +51,7 @@ enyo.kind({
 	components: [
 		{
 			kind: "PageHeader",
-			content: "SubOrbital - Beta 1"
+			content: "SubOrbital - Beta 2.5"
 		},
 		{
 			kind: "HFlexBox",
