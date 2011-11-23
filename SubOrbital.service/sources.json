@@ -18,5 +18,11 @@
 },
 {
     "source": "BackupRestoreAssistant.js"
+},
+{
+	"source": "IconAssistant.js"
+},
+{
+	"source": "ParseAndWrite.js"
 }
 ]

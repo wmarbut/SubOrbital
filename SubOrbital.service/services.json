@@ -30,6 +30,11 @@
 			    "name": "backupRestore",
 			    "assistant": "BackupRestoreAssistant",
 			    "public": true
+			},
+			{
+				"name": "icons",
+				"assistant": "IconAssistant",
+				"public": true
 			}
 		]
 	 }]

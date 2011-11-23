@@ -14,6 +14,7 @@ enyo.depends("app.css",
 	"source/prefs.js",
 	"source/logger.js",
 	"source/errorDialog.js",
+	"source/lockedNotice.js",
 	"source/BackupSlider/confirmRestore.js",
 	"source/BackupSlider/backupManager.js",
 	"source/BackupSlider/newBackupDialog.js");

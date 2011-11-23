@@ -10,6 +10,7 @@ enyo.kind({
 		onSave: ""
 	},
 	itemIndex: 0,
+	itemName: "",
 	components: [
 		{
 		name: "deleteHeader",
@@ -37,7 +38,9 @@ enyo.kind({
 		if (tabs && tabs.length >0) {
 			var items = [];
 			for (var ti in tabs) {
-				items.push(tabs[ti].name);
+				if (tabs[ti].name.toUpperCase() != this.itemName.toUpperCase()) {
+					items.push(tabs[ti].name);
+				}
 			}
 			this.$.picker.setItems(items);
 			this.$.picker.setValue(items[0]);
@@ -46,8 +49,9 @@ enyo.kind({
 	setItem: function(item) {
 		this.$.deleteHeader.setContent("Delete: " + item.name);
 		this.itemIndex = item.index;
+		this.itemName = item.name;
 	},
 	save: function(inSender, inEvent) {
-		this.doSave({"index": this.itemIndex, "moveTo": this.$.picker.getValue()});
+		this.doSave({"item": this.itemName, "index": this.itemIndex, "moveTo": this.$.picker.getValue()});
 	}
 });

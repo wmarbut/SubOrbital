@@ -11,6 +11,7 @@ enyo.kind({
 	tab_data: [
 	
 	],
+	svcDebug: true,
 	built_in_tabs: {
 		"APPS": {
 			"name":"APPS",
@@ -108,6 +109,25 @@ enyo.kind({
 				{
 					kind: "Group",
 					flex: 1,
+					caption: "Move",
+					components: [
+						{
+							kind: "Button",
+							caption: "Up",
+							className: "enyo-button-blue",
+							onclick: "moveUpButton"
+						},
+						{
+							kind: "Button",
+							caption: "Down",
+							className: "enyo-button-blue",
+							onclick: "moveDownButton"
+						}
+					]
+				},
+				{
+					kind: "Group",
+					flex: 1,
 					caption: "Edit",
 					components: [
 						{
@@ -166,6 +186,9 @@ enyo.kind({
 			kind: "errorDialog"
 		},
 		{
+			kind: "lockedNotice"
+		},
+		{
 			kind: "Dialog",
 			name: "restartConfirmDialog",
 			components: [
@@ -196,6 +219,7 @@ enyo.kind({
 		this.$.newDialog.open();
 	},
 	newTab: function(inSender,name) {
+		var debug = this.svcDebug;
 		console.log("Create: " + name);
 		if (window.PalmSystem) {
 			this.$.launcherSvc.call({
@@ -203,7 +227,8 @@ enyo.kind({
 					"action":"new",
 					"name":name
 				},
-				"save":true
+				"save":true,
+				"debug":debug
 			});
 		} else {
 			this.tab_data.push({"name":name,"index":this.tab_data.length});
@@ -212,10 +237,16 @@ enyo.kind({
 	},
 	renameButton: function(inSender, inEvent) {
 		var selection = this.$.tabsList.getSelection().lastSelected;
-		this.$.renameDialog.open();
-		this.$.renameDialog.setName(this.tab_data[selection]);
+		var tab = (selection)? this.tab_data[selection]: false;
+		if (tab && !this.built_in_tabs[tab.name.toUpperCase()]) {
+			this.$.renameDialog.open();
+			this.$.renameDialog.setName(tab);
+		} else {
+			this.$.lockedNotice.open();
+		}
 	},
 	renameTab: function(inSender, item) {
+		var debug = this.svcDebug;
 		if (window.PalmSystem) {
 			this.$.launcherSvc.call({
 				"tabArgs": {
@@ -223,7 +254,8 @@ enyo.kind({
 					"index":item.index,
 					"name":item.name
 				},
-				"save":true
+				"save":true,
+				"debug":debug
 			});
 		} else {
 			console.log(item);
@@ -233,30 +265,71 @@ enyo.kind({
 	},
 	deleteButton: function(inSender, inEvent) {
 		var selection = this.$.tabsList.getSelection().lastSelected;
-		this.$.deleteDialog.open();
-		this.$.deleteDialog.setItem(this.tab_data[selection]);
-		var del_tab_list = this.tab_data.slice(0);
-		for (var en in this.built_in_tabs) {
-			del_tab_list.push(this.built_in_tabs[en]);
+		var selection = this.$.tabsList.getSelection().lastSelected;
+		var tab = (selection)? this.tab_data[selection]: false;
+		if (tab && !this.built_in_tabs[tab.name.toUpperCase()]) {
+			this.$.deleteDialog.open();
+			this.$.deleteDialog.setItem(tab);
+			var del_tab_list = this.tab_data.slice(0);
+			for (var en in this.built_in_tabs) {
+				del_tab_list.push(this.built_in_tabs[en]);
+			}
+			this.$.deleteDialog.setTabList(del_tab_list);
+		} else {
+			this.$.lockedNotice.open();
 		}
-		this.$.deleteDialog.setTabList(del_tab_list);
 	},
 	deleteTab: function(inSender, inEvent) {
 		var index = inEvent.index;
+		var item = inEvent.item;
 		var moveTo = inEvent.moveTo;
-		console.log("Delete: " + index + " move to: " + moveTo);
+		var debug = this.svcDebug;
+		console.log("Delete: " + item + " move to: " + moveTo);
 		if (window.PalmSystem) {
 			this.$.launcherSvc.call({
 				"tabArgs": {
 					"action":"del",
-					"index":index,
+					"item":item,
 					"moveTo":moveTo
 				},
-				"save":true
+				"save":true,
+				"debug":debug
 			});
 		} else {
 			this.tab_data.splice(index,1);
 			this.$.tabsList.refresh();
+		}
+	},
+	moveUpButton: function(inSender, inEvent) {
+		var selection = this.$.tabsList.getSelection().lastSelected;
+		console.log("Moving up: " + this.tab_data[selection].name);
+		var debug = this.svcDebug;
+		if (window.PalmSystem) {
+			this.$.launcherSvc.call({
+				"tabArgs": {
+					"action":"mv",
+					"name":this.tab_data[selection].name,
+					"delta":-1
+				},
+				"save": true,
+				"debug":debug
+			})
+		}
+	},
+	moveDownButton: function(inSender, inEvent) {
+		var selection = this.$.tabsList.getSelection().lastSelected;
+		console.log("Moving down: " + this.tab_data[selection].name);
+		var debug = this.svcDebug;
+		if (window.PalmSystem) {
+			this.$.launcherSvc.call({
+				"tabArgs": {
+					"action":"mv",
+					"name":this.tab_data[selection].name,
+					"delta":1
+				},
+				"save": true,
+				"debug":debug
+			})
 		}
 	},
 	launcherSuccess: function(inSender, inResponse) {
@@ -265,9 +338,9 @@ enyo.kind({
 		this.tab_data = new Array();
 		for (var entry_i in inResponse.data) {
 			var entry = inResponse.data[entry_i];
-			if (!this.built_in_tabs[entry.name]) {
+			//if (!this.built_in_tabs[entry.name]) {
 				this.tab_data.push(entry);
-			}
+			//}
 		}
 		if (inResponse.error && inResponse.error.length > 0) {
 			//TODO write error log
