@@ -5,6 +5,7 @@
 */
 var libraries = MojoLoader.require({ name: "foundations", version: "1.0" }, {name:"foundations.json", version: "1.0"});
 var fs = IMPORTS.require('fs');
+var exec = IMPORTS.require("child_process").exec;
 //IMPORTS.require('/media/cryptofs/apps/usr/palm/services/com.whitm.suborbital.service/ParseAndWrite.js');
 
 var IconAssistant = function() {

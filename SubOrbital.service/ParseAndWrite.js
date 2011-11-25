@@ -370,6 +370,12 @@ LauncherConf.prototype.writeFiles = function() {
 		fs.writeFileSync((filePath+entry.file_name), entry_file.join("\n"));
 	}
 	
+	/* Bug 6. Whit WebOs
+	 * The launcher promptly changes from 777 back to
+	 * 644
+	 *  */
+	exec('chmod 777 /var/luna/preferences/launcher3/*');
+	
 	return true;
 }
 LauncherConf.prototype.getIcons = function() {
