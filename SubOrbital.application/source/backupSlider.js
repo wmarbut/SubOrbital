@@ -29,6 +29,7 @@ enyo.kind({
 		{
 			name: "backupsList",
 			kind: enyo.VirtualList,
+			width: "320px",
 			flex: 1,
 			onSetupRow: "setupRow",
 			components: [

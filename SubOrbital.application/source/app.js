@@ -12,7 +12,8 @@ enyo.kind({
 			flex: 1,
 			components: [
 				{kind:"MainSlider"},
-				{kind:"BackupSlider"}
+				{kind:"BackupSlider"},
+				{kind:"IconSlider"}
 			]
 		}
 	]
