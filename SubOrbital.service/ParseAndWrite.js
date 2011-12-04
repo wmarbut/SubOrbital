@@ -396,6 +396,21 @@ LauncherConf.prototype.getIcons = function() {
 		"tabs": tabs
 	};
 }
+LauncherConf.prototype.moveIcons = function(fromTab, toTab, icons) {
+	if (!icons || 
+		(Object.prototype.toString.call(icons) != '[object Array]') ||
+		fromTab.kind != "Entry" ||
+		toTab.kind != "Entry") {
+		var error_spec = (Object.prototype.toString.call(icons) != '[object Array]')? " (icon array not array type)" : "";
+		error_spec += (fromTab.kind != "IconEntry")? " (invalid fromTab)" : "";
+		error_spec += (toTab.kind != "IconEntry")? " (invalid toTab)" : "";
+		this.addErr(this, "Invalid argument to moveIcons " + error_spec);
+		console.log("invalid argument to moveIcons");
+		return false;
+	}
+	fromTab.removeIcons(icons);
+	toTab.addIcons(icons);
+}
 
 var Entry = function(conf) {
 	this.kind = "Entry";
@@ -427,6 +442,21 @@ Entry.prototype.parseRawData = function() {
 	}
 	if (icon) {
 		this.icons.push(icon);
+	}
+}
+Entry.prototype.removeIcons = function(icons) {
+	if (!icons || (Object.prototype.toString.call(icons) != '[object Array]')) {
+		this.__conf.addErr(this, "Invalid argument to removeIcons");
+		console.log("invalid argument to removeIcons");
+		return false;
+	}
+	for (var icon_i in icons) {
+		var icon = icons[icon_i];
+		for (var t_icon_i in this.icons) {
+			if (icon.id == this.icons[t_icon_i].id) {
+				this.icons.splice(t_icon_i, 1);
+			}
+		}	
 	}
 }
 Entry.prototype.addIcons = function(icons) {
@@ -566,6 +596,15 @@ IconEntry.prototype.cloneSelf = function() {
 	icon.launchtype = this.launchtype;
 	icon.type = this.type;
 	return icon;
+}
+IconEntry.objectify = function(obj, conf) {
+	var new_obj = new IconEntry(conf);
+	new_obj.index = obj.index;
+	new_obj.id = obj.id;
+	new_obj.launchid = obj.launchid;
+	new_obj.launchtype = obj.launchtype;
+	new_obj.type = obj.type;
+	return new_obj;
 }
 IconEntry.prototype.parseLine = function(line) {
 	l1 = /^([0-9]{1,3})[\\]{1}id\=([a-zA-Z0-9\.\-\_]*)$/;

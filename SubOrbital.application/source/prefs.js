@@ -9,6 +9,7 @@ enyo.kind({
 	__getLaunchedCallbacks: [
 	
 	],
+	softwareBuild: "0.8.0",
 	components: [
 		{
 			name: "getPreferencesCall",
@@ -28,7 +29,7 @@ enyo.kind({
 		}
 	],
 	getPreferencesSuccess: function(inSender, inResponse) {
-		var response = (inResponse.launched)? true : false;
+		var response = (inResponse.launched && inResponse.launched == this.softwareBuild)? true : false;
 		this.notifyLaunchedCallbacks({"value": response});
 	},
 	getPreferencesFailure: function(inSender, inResponse) {
@@ -42,6 +43,7 @@ enyo.kind({
 	},
 	setLaunched: function(launched) {
 		console.log("Setting launched pref: " + launched);
+		launched = (launched)? this.softwareBuild : false;
 		if (window.PalmSystem) {
 			this.$.setPreferencesCall.call({
 			"launched":launched
@@ -57,6 +59,7 @@ enyo.kind({
 		} else {
 			var rand = (Math.round(Math.random()) == 1)? true: false;
 			this.getPreferencesSuccess(this, {"launched":rand});
+			console.log("Show prefs: " + rand);
 		}
 	},
 	notifyLaunchedCallbacks: function(message) {

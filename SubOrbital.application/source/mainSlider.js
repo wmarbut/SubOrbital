@@ -37,7 +37,6 @@ enyo.kind({
 					"action":"rd"
 				}
 			});
-			this.$.prefs.getLaunched(enyo.bind(this,this.prefsReturn));
 		} else {
 			this.tab_data = [
 				{name:"Apps", index:0},
@@ -47,11 +46,12 @@ enyo.kind({
 			];
 			this.$.tabsList.refresh();
 		}
+		this.$.prefs.getLaunched(enyo.bind(this,this.prefsReturn));
 	},
 	components: [
 		{
 			kind: "PageHeader",
-			content: "SubOrbital - Beta 2.5"
+			content: "SubOrbital - Beta 3.0"
 		},
 		{
 			kind: "HFlexBox",

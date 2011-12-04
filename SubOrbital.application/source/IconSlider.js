@@ -98,6 +98,7 @@ enyo.kind({
 				}
 			}
 		}
+		this.$.iconList.setMultiSelect(true);
 		this.callIconSvcRead();
 	},
 	components: [
@@ -128,11 +129,10 @@ enyo.kind({
 				{
 					kind: "Item",
 					layoutKind: "HFlexLayout",
+					onclick: "selectItem",
+					name: "iconItem",
 					components: [
-						{name: "iconItem", flex: 1},
-						{
-							kind: "CheckBox"
-						}
+						{name: "iconName", flex: 1}
 					]
 				}
 			]
@@ -155,7 +155,8 @@ enyo.kind({
 				},
 				{
 					kind: "Button",
-					caption: "Move"
+					caption: "Move",
+					onclick: "moveIcons"
 				}
 			]
 		},
@@ -169,6 +170,21 @@ enyo.kind({
 			method: "icons",
 			onSuccess: "iconSvcSuccess",
 			onFailure: "iconSvcFailure"
+		},
+		{
+			kind: "Dialog",
+			name: "moveCompleteDialog",
+			components: [
+				{
+					style: "text-align: center",
+					content: "Your icons have been moved, but luna must be restarted for changes to be visible. Using the \"Luna Restart\" option on the main page for changes to show up"
+				},
+				{
+					kind: "Button",
+					caption: "Ok",
+					popupHandler: true
+				}
+			]
 		}
 	],
 	callIconSvcRead: function() {
@@ -179,6 +195,22 @@ enyo.kind({
 		}
 	},
 	iconSvcSuccess: function(inSender, inResponse) {
+		console.log("Received icon data from iconSvc");
+		
+		if (inResponse.error) {
+			console.log("Error occurred");
+			console.log(inResponse.description);
+			if (inResponse.errors) {
+				console.log(JSON.stringify(inResponse.errors));
+			}
+			return false;
+		}
+		
+		console.log("IconSvc action: " + inResponse.action)
+		if (inResponse.action && inResponse.action == "mv") {
+			this.$.moveCompleteDialog.open();
+		}
+		
 		this.iconData = inResponse;
 		//is the currentList attribute set?
 		this.currentList = (this.currentList)? this.currentList : this.getFirstTab();
@@ -194,14 +226,43 @@ enyo.kind({
 		if (this.iconData.tabs[this.currentList].length > 0 &&
 			inIndex >= 0 &&
 			inIndex < this.iconData.tabs[this.currentList].length) {
-			this.$.iconItem.setContent('test: ' + this.iconData.tabs[this.currentList][inIndex]);
+			this.$.iconItem.applyStyle("background", (inSender.isSelected(inIndex))? "lightblue" : null);
+			this.$.iconName.setContent(this.iconData.tabs[this.currentList][inIndex]);
 			return true;
 		}
 		return false;
 	},
+	selectItem: function(inSender, inEvent) {
+		this.$.iconList.select(inEvent.rowIndex);
+	},
 	selectedTabChanged: function(inSender, inValue, inOldValue) {
 		this.currentList = inValue;
    		this.updateLists();
+	},
+	moveIcons: function(inSender, inEvent) {
+		console.log("Preparing batch move of icons");
+		var selectedIcons = new Array();
+		var count = 0;
+		for (var icon_i in this.iconData.tabs[this.currentList]) {
+			var icon = this.iconData.tabs[this.currentList][icon_i];
+			if (this.$.iconList.isSelected(count)) {
+				selectedIcons.push(this.iconData.icons[icon]);
+			}
+			count += 1;
+		}
+		var toTab = this.$.moveList.getValue();
+		var fromTab = this.$.chooseList.getValue();
+		console.log("Calling move: " +  fromTab + "->" + toTab + " " + enyo.json.stringify(selectedIcons));
+		
+		if (window.PalmSystem) {
+			this.$.iconSvc.call({
+				"action":"mv",
+				"icons":selectedIcons,
+				"toTab":toTab,
+				"fromTab":fromTab,
+				"save":true
+			});
+		}
 	},
 	getFirstTab: function() {
 		var ft = false;
@@ -214,6 +275,16 @@ enyo.kind({
 		return ft;
 	},
 	updateLists: function() {
+		//clear selection
+		if (this.currentList) {
+			var count = 0;
+			for (var icon_i in this.iconData.tabs[this.currentList]) {
+				if (this.$.iconList.isSelected(count)) {
+					this.$.iconList.select(count);
+				}
+				count += 1;
+			}
+		}
 		//setup choose list
 		this.chooseList = new Array();
 		//setup move list
@@ -231,6 +302,6 @@ enyo.kind({
 		this.$.moveList.setItems(this.moveList);
 		this.$.moveList.setValue(this.moveList[0]);
 		
-		this.$.iconList.refresh();
+		this.$.iconList.punt();
 	}
 });
